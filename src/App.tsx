@@ -121,7 +121,28 @@ export default function App() {
       <section id="about" className="section section-about section-shell">
         <div className="section-heading"><span className="section-index">01 — THE PERSON</span><span className="section-note">A little context, a lot of curiosity</span></div>
         <div className="about-layout">
-          <div className="about-visual"><div className="portrait-placeholder"><div className="portrait-ring ring-a" /><div className="portrait-ring ring-b" /><div className="portrait-core"><span className="portrait-initials">ED</span><span className="portrait-caption">YOUR PORTRAIT<br />GOES HERE</span></div><span className="portrait-cross cross-a">+</span><span className="portrait-cross cross-b">+</span><span className="portrait-label">FIG. 01 / IDENTITY</span></div><div className="visual-footnote"><span className="tiny-square" /> ALWAYS IN PROGRESS</div></div>
+          <div className="about-visual">
+  <div className="portrait-placeholder">
+    <div className="portrait-ring ring-a" />
+    <div className="portrait-ring ring-b" />
+
+    <div className="portrait-core">
+      <img
+        src="/2026-05-02%2021.33.34.png"
+        alt="Edwin Darko"
+        className="portrait-photo"
+      />
+    </div>
+
+    <span className="portrait-cross cross-a">+</span>
+    <span className="portrait-cross cross-b">+</span>
+    <span className="portrait-label">FIG. 01 / IDENTITY</span>
+  </div>
+
+  <div className="visual-footnote">
+    <span className="tiny-square" /> ALWAYS IN PROGRESS
+  </div>
+</div>
           <div className="about-copy"><p className="eyebrow">HELLO, WORLD</p><h2>Learning the craft.<br /><span className="muted-heading">Building with purpose.</span></h2><p className="body-large">I’m Edwin — a Computer Science student at Ghana Communication Technology University, interested in how thoughtful software can make everyday things work better.</p><p className="body-copy">I learn by exploring ideas, writing code, experimenting, and paying attention to what works (and what doesn’t). I’m still growing my toolkit, and that’s part of the point: stay curious, keep practising, and turn what I learn into useful things.</p><p className="body-copy">This is a living record of that process — the projects, questions, and small steps that shape the engineer I’m working towards becoming.</p><div className="about-signoff"><span className="signature">Edwin<span>.</span></span><span className="signoff-note">STUDENT · BUILDER · ALWAYS LEARNING</span></div></div>
         </div>
       </section>

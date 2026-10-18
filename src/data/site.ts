@@ -1,10 +1,10 @@
 /** Update personal links and copy here before publishing. Empty links are intentionally not rendered. */
 export const site = {
   name: 'Edwin Darko',
-  email: 'YOUR_EMAIL@example.com',
-  github: '',
-  linkedin: '',
-  cvPath: '', // Example: '/edwin-darko-cv.pdf' after adding a real CV to /public.
+  email: 'edwindarko4@gmail.com',
+  github: 'https://github.com/Eddie-kay01',
+  linkedin: 'https://www.linkedin.com/in/edwin-darko-227621411/',
+  cvPath: '/edwin-darko-cv.pdf',
   university: 'Ghana Communication Technology University',
   degree: 'Computer Science',
   currentlyBuilding: 'Small ideas into useful software',
@@ -51,12 +51,27 @@ export const projects: Project[] = [
   },
 ]
 
+
 export const skills = [
-  { category: 'Languages', items: ['Add languages you have used'] },
-  { category: 'Frontend', items: ['Add frontend technologies'] },
-  { category: 'Backend & data', items: ['Add backend or database tools'] },
-  { category: 'Tools & learning', items: ['Add development tools', 'Currently learning: update me'] },
-]
+  {
+    category: 'Languages',
+    items: ['JavaScript', 'TypeScript', 'HTML', 'CSS', 'Python', 'Java'],
+  },
+  {
+    category: 'Frontend',
+    items: ['React', 'Vite', 'Expo Router'],
+  },
+  {
+    category: 'Backend & data',
+    items: ['Node.js', 'Express.js', 'PostgreSQL', 'Prisma', 'REST APIs', 'JWT Authentication'],
+  },
+  {
+    category: 'Tools & learning',
+    items: ['Git', 'GitHub', 'VS Code', 'Vercel', 'DeepSeek API', 'Currently learning: AI & Machine Learning'],
+  },
+];
+
+
 
 export const journey = [
   { label: 'Education', title: 'Computer Science at GCTU', detail: 'Building a foundation in computing, software, and problem solving.', kind: 'Current chapter' },
