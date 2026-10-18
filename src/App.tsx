@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import ParticleField from './components/ParticleField'
 import { journey, projects, site, skills, type Project } from './data/site'
@@ -16,6 +16,8 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [copied, setCopied] = useState(false)
   const [formStatus, setFormStatus] = useState<{ type: 'idle' | 'sending' | 'success' | 'error'; message: string }>({ type: 'idle', message: '' })
+  const projectDialogRef = useRef<HTMLElement | null>(null)
+  const modalCloseRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
@@ -28,10 +30,42 @@ export default function App() {
 
   useEffect(() => {
     if (!selectedProject) return
-    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') setSelectedProject(null) }
-    window.addEventListener('keydown', onKey)
+    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const previousOverflow = document.body.style.overflow
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setSelectedProject(null)
+        return
+      }
+      if (event.key !== 'Tab') return
+
+      const dialog = projectDialogRef.current
+      if (!dialog) return
+      const focusable = Array.from(dialog.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (!first || !last) {
+        event.preventDefault()
+      } else if (!dialog.contains(document.activeElement)) {
+        event.preventDefault()
+        const target = event.shiftKey ? last : first
+        target.focus()
+      } else if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+    modalCloseRef.current?.focus()
+    window.addEventListener('keydown', onKeyDown)
     document.body.style.overflow = 'hidden'
-    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = previousOverflow
+      if (previouslyFocused?.isConnected) previouslyFocused.focus()
+    }
   }, [selectedProject])
 
   const emailConfigured = site.email && !site.email.includes('YOUR_EMAIL')
@@ -140,6 +174,6 @@ export default function App() {
 
     <footer className="site-footer section-shell"><a className="footer-brand" href="#home">ED<span>.</span></a><p>Exploring technology. Building what’s next.</p><div className="footer-right"><span>DESIGNED TO EVOLVE</span><a href="#home">BACK TO TOP ↑</a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} EDWIN DARKO</span><span>MADE WITH CURIOSITY IN GHANA <i>✳</i></span></div></footer>
 
-    {selectedProject && <div className="modal-backdrop" role="presentation" onMouseDown={e => { if (e.target === e.currentTarget) setSelectedProject(null) }}><section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div className="modal-top"><span>PROJECT FILE / {selectedProject.status.toUpperCase()}</span><button className="modal-close" onClick={() => setSelectedProject(null)} aria-label="Close project details">×</button></div><p className="eyebrow">{selectedProject.type}</p><h2 id="modal-title">{selectedProject.name}<span className="accent-text">.</span></h2><p className="modal-description">{selectedProject.short}</p><div className="modal-section"><span className="modal-label">CURRENT STATUS</span><p>{selectedProject.status} — update this status once the project stage is confirmed.</p></div><div className="modal-section"><span className="modal-label">FEATURES / AREAS OF FOCUS</span><ul>{selectedProject.features.map(feature => <li key={feature}>{feature}</li>)}</ul></div><div className="modal-section"><span className="modal-label">TECHNOLOGY</span><div className="interest-tags">{selectedProject.stack.map(item => <span key={item}>{item}</span>)}</div></div><div className="modal-section"><span className="modal-label">NOTES & LEARNINGS</span><p>{selectedProject.learning}</p></div><div className="modal-links">{selectedProject.repo ? <a href={selectedProject.repo} target="_blank" rel="noreferrer">View repository <Arrow diagonal /></a> : <span>Repository link not added</span>}{selectedProject.demo ? <a href={selectedProject.demo} target="_blank" rel="noreferrer">Live demo <Arrow diagonal /></a> : <span>Demo link not added</span>}</div></section></div>}
+    {selectedProject && <div className="modal-backdrop" role="presentation" onMouseDown={e => { if (e.target === e.currentTarget) setSelectedProject(null) }}><section ref={projectDialogRef} className="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div className="modal-top"><span>PROJECT FILE / {selectedProject.status.toUpperCase()}</span><button ref={modalCloseRef} className="modal-close" onClick={() => setSelectedProject(null)} aria-label="Close project details">×</button></div><p className="eyebrow">{selectedProject.type}</p><h2 id="modal-title">{selectedProject.name}<span className="accent-text">.</span></h2><p className="modal-description">{selectedProject.short}</p><div className="modal-section"><span className="modal-label">CURRENT STATUS</span><p>{selectedProject.status} — update this status once the project stage is confirmed.</p></div><div className="modal-section"><span className="modal-label">FEATURES / AREAS OF FOCUS</span><ul>{selectedProject.features.map(feature => <li key={feature}>{feature}</li>)}</ul></div><div className="modal-section"><span className="modal-label">TECHNOLOGY</span><div className="interest-tags">{selectedProject.stack.map(item => <span key={item}>{item}</span>)}</div></div><div className="modal-section"><span className="modal-label">NOTES & LEARNINGS</span><p>{selectedProject.learning}</p></div><div className="modal-links">{selectedProject.repo ? <a href={selectedProject.repo} target="_blank" rel="noreferrer">View repository <Arrow diagonal /></a> : <span>Repository link not added</span>}{selectedProject.demo ? <a href={selectedProject.demo} target="_blank" rel="noreferrer">Live demo <Arrow diagonal /></a> : <span>Demo link not added</span>}</div></section></div>}
   </>
 }
